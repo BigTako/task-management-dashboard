@@ -6,8 +6,10 @@ import {
   BsXCircleFill,
 } from "react-icons/bs";
 import { cn } from "~/utils/cn";
+import { api } from "~/trpc/react";
 import { CreateCard } from "./create";
 import { Column } from "@prisma/client";
+import { EditCard } from "./edit";
 
 function CardLayout({
   children,
@@ -29,24 +31,45 @@ function CardLayout({
 }
 
 export function Card({
+  id,
   title,
   description,
 }: {
+  id: string;
   title: string;
   description: string;
 }) {
+  const [editFormOpened, setEditFormOpened] = useState(false);
+  const utils = api.useUtils();
+
+  const deleteCard = api.card.delete.useMutation({
+    onSuccess: async () => {
+      await utils.board.invalidate();
+    },
+  });
+
   return (
     <CardLayout className="text-start">
       <div className="flex justify-between gap-2">
-        <div>
-          <div className="font-bold">{title}</div>
-          <div>{description}</div>
-        </div>
+        {editFormOpened ? (
+          <EditCard id={id} onSubmit={() => setEditFormOpened(false)} />
+        ) : (
+          <div>
+            <div className="font-bold">{title}</div>
+            <div>{description}</div>
+          </div>
+        )}
         <div className="flex flex-col gap-3">
-          <button className="text-[20px]">
-            <BsPencilSquare />
+          <button
+            className="text-[20px]"
+            onClick={() => setEditFormOpened((v) => !v)}
+          >
+            {editFormOpened ? <BsXCircleFill /> : <BsPencilSquare />}
           </button>
-          <button className="text-[20px]">
+          <button
+            className="text-[20px]"
+            onClick={() => deleteCard.mutate({ id })}
+          >
             <BsTrashFill />
           </button>
         </div>
@@ -67,6 +90,7 @@ export function AddCard({
   const toggleFormOpened = useCallback(() => {
     setFormOpened((v) => !v);
   }, []);
+
   return (
     <CardLayout className="cursor-pointer">
       <div>

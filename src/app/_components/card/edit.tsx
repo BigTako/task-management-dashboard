@@ -1,20 +1,17 @@
 "use client";
 
 import { CircularProgress } from "@mui/material";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { api } from "~/trpc/react";
 import { CardType } from "./types";
-import { Column } from "@prisma/client";
-import { InputError } from "../InputError";
 
-export function CreateCard({
-  boardId,
-  column,
+export function EditCard({
+  id,
+  onSubmit,
 }: {
-  boardId: string;
-  column: Column;
+  id: string;
+  onSubmit: () => void;
 }) {
   const [cardData, setCardData] = useState<
     Pick<CardType, "title" | "description">
@@ -24,14 +21,13 @@ export function CreateCard({
     Partial<Pick<CardType, "title" | "description">>
   >({});
 
-  const router = useRouter();
   const utils = api.useUtils();
-  const createCard = api.card.create.useMutation({
+
+  const editCard = api.card.update.useMutation({
     onSuccess: async () => {
-      router.refresh();
       await utils.board.invalidate();
       setCardData({ title: "", description: "" });
-      setCardErrors({ title: "", description: "" });
+      onSubmit();
     },
     onError: (error) => {
       const errorData = error.shape?.data.zodError?.fieldErrors as {
@@ -51,9 +47,9 @@ export function CreateCard({
     <form
       onSubmit={async (e) => {
         e.preventDefault();
-        createCard.mutate({ title, description, column, boardId });
+        editCard.mutate({ id, body: cardData });
       }}
-      className="flex grow flex-col items-center justify-end gap-2"
+      className="flex grow flex-col items-center justify-center gap-2"
     >
       <input
         type="text"
@@ -62,7 +58,6 @@ export function CreateCard({
         onChange={(e) => setCardData((v) => ({ ...v, title: e.target.value }))}
         className="w-full rounded-[10px] border-[1px] border-black px-4 py-2 text-black"
       />
-      <InputError>{cardErrors.title}</InputError>
       <input
         type="text"
         placeholder="Descripton"
@@ -72,13 +67,12 @@ export function CreateCard({
         }
         className="w-full rounded-[10px] border-[1px] border-black px-4 py-2 text-black"
       />
-      <InputError>{cardErrors.description}</InputError>
       <button
         type="submit"
         className="w-full rounded-[10px] bg-gray-800 px-3 py-2 font-semibold text-white transition"
-        disabled={createCard.isPending}
+        disabled={editCard.isPending}
       >
-        {createCard.isPending ? <CircularProgress size={"20px"} /> : "Submit"}
+        {editCard.isPending ? <CircularProgress size={"20px"} /> : "Submit"}
       </button>
     </form>
   );

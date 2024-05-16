@@ -13,6 +13,7 @@
     "dev": "next dev",
     "postinstall": "prisma generate",
     "lint": "next lint",
+    "lint:fix": "prettier --write . && eslint --ext .js,.mjs --fix .",
     "start": "next start"
   },
   "dependencies": {

@@ -26,8 +26,22 @@ export const cardRouter = createTRPCRouter({
   create: publicProcedure
     .input(
       z.object({
-        title: z.string().min(1),
-        description: z.string().min(1),
+        title: z
+          .string()
+          .min(1, {
+            message: "Title should not be empty",
+          })
+          .max(128, {
+            message: "Title should contain at most 128 characters",
+          }),
+        description: z
+          .string()
+          .min(1, {
+            message: "Description should not be empty",
+          })
+          .max(512, {
+            message: "Description should contain at most 512 characters",
+          }),
         column: z.string().refine((v) => Object.keys(Column).includes(v)),
         boardId: z.string(),
       }),

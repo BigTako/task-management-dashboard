@@ -27,7 +27,8 @@ function Column({
       <div className="flex h-full flex-col gap-3 overflow-y-auto bg-blue-900 p-2 text-center">
         {cards.map((card) => (
           <Card
-            key={card.title}
+            id={card.id}
+            key={card.id}
             title={card.title}
             description={card.description}
           />
