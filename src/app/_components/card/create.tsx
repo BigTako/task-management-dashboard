@@ -29,17 +29,6 @@ export function CreateCard({
       setCardData({ title: "", description: "" });
     },
   });
-  // const createCard = api.card.create.useMutation({
-  //   async onMutate() {
-  //     const prevData = utils.board.list.getData();
-  //     utils.board.
-  //     // await utils.board.invalidate();
-  //   },
-  //   onSuccess: () => {
-  //     router.refresh();
-  //     setCardData({ title: "", description: "" });
-  //   },
-  // });
 
   const { title, description } = cardData;
 
@@ -48,8 +37,6 @@ export function CreateCard({
       onSubmit={async (e) => {
         e.preventDefault();
         createCard.mutate({ title, description, column, boardId });
-
-        // await utils.board.invalidate();
       }}
       className="flex grow flex-col items-center justify-center gap-2"
     >

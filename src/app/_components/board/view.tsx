@@ -6,6 +6,7 @@ import { BoardType } from "./types";
 import { Column as ColumnEnum } from "@prisma/client";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { set } from "zod";
 
 const columnTitles = {
   IN_PROGRESS: "In Progress",
@@ -44,9 +45,12 @@ function useSearchUrl() {
   const pathname = usePathname();
   const { replace } = useRouter();
 
-  const get = useCallback((param: string) => searchParams.get(param), []);
-  const set = useCallback(
-    (param: string, value: string) => {
+  const getParam = useCallback(
+    (param: string) => searchParams.get(param),
+    [searchParams],
+  );
+  const setParam = useCallback(
+    (param: string, value: string | null) => {
       const params = new URLSearchParams(searchParams);
       if (value) {
         params.set(param, value);
@@ -58,27 +62,19 @@ function useSearchUrl() {
     },
     [pathname, replace, searchParams],
   );
-  return [get, set];
+  return { getParam, setParam };
 }
 
 export function BoardView({ boards }: { boards: BoardType[] }) {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const { replace } = useRouter();
-  const [boardId, setBoardId] = useState(searchParams.get("board"));
+  const { getParam, setParam } = useSearchUrl();
+
+  const [boardId, setBoardId] = useState(getParam("board"));
 
   const handleSearch = useCallback(() => {
-    const params = new URLSearchParams(searchParams);
-    if (boardId) {
-      params.set("board", boardId);
-    } else {
-      params.delete("board");
-    }
+    setParam("board", boardId);
+  }, [boardId]);
 
-    replace(`${pathname}?${params.toString()}`);
-  }, [boardId, pathname, replace, searchParams]);
-
-  const seachBoardId = searchParams.get("board") ?? "";
+  const seachBoardId = getParam("board") ?? "";
 
   const curBoard = boards.find((board) => board.id === seachBoardId);
 
@@ -98,7 +94,7 @@ export function BoardView({ boards }: { boards: BoardType[] }) {
         <div className="h-[40px] w-full rounded-[20px] bg-green-300 text-black">
           <input
             className="h-full w-full outline-none"
-            defaultValue={searchParams.get("board") ?? ""}
+            defaultValue={seachBoardId}
             onChange={(e) => setBoardId(e.target.value)}
           />
         </div>
