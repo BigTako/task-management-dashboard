@@ -1,10 +1,10 @@
 "use client";
 
-import { useCallback, useState } from "react";
 import { AddCard, Card, CardType } from "../card";
 import { BoardType } from "./types";
 import { Column as ColumnEnum } from "@prisma/client";
 import { useSearchUrl } from "../_hooks";
+import { BoardSearch } from "./search";
 
 const columnTitles = {
   IN_PROGRESS: "In Progress",
@@ -39,13 +39,7 @@ function Column({
 }
 
 export function BoardView({ boards }: { boards: BoardType[] }) {
-  const { getParam, setParam } = useSearchUrl();
-
-  const [boardId, setBoardId] = useState(getParam("board"));
-
-  const handleSearch = useCallback(() => {
-    setParam("board", boardId);
-  }, [boardId]);
+  const { getParam } = useSearchUrl();
 
   const seachBoardId = getParam("board") ?? "";
 
@@ -63,21 +57,8 @@ export function BoardView({ boards }: { boards: BoardType[] }) {
 
   return (
     <div className="flex min-h-full w-full flex-col items-stretch gap-5 p-2">
-      <div className="flex gap-4">
-        <div className="h-[40px] w-full rounded-[20px] bg-green-300 text-black">
-          <input
-            className="h-full w-full outline-none"
-            defaultValue={seachBoardId}
-            onChange={(e) => setBoardId(e.target.value)}
-          />
-        </div>
-        <button
-          className="rounded-[20px] bg-green-300 px-3 text-black"
-          onClick={handleSearch}
-        >
-          Load
-        </button>
-      </div>
+      <BoardSearch />
+
       <div className="flex h-full gap-3">
         <Column
           boardId={seachBoardId}
