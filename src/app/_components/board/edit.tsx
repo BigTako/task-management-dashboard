@@ -6,40 +6,36 @@ import { useState } from "react";
 
 import { api } from "~/trpc/react";
 
-export function CreateBoard() {
-  const [name, setName] = useState("");
+export function EditBoard({ id, name }: { id: string; name: string }) {
+  const [newName, setNewName] = useState(name);
 
   const router = useRouter();
-  const utils = api.useUtils();
-  const createBoard = api.board.create.useMutation({
+  const updateBoard = api.board.update.useMutation({
     onSuccess: () => {
       router.refresh();
-      utils.board.invalidate();
-      setName("");
     },
   });
-
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        createBoard.mutate({ name });
+        updateBoard.mutate({ id, body: { name: newName } });
       }}
       className="flex grow flex-col items-center justify-center gap-2"
     >
       <input
         type="text"
         placeholder="Title"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        value={newName}
+        onChange={(e) => setNewName(e.target.value)}
         className="w-full rounded-[10px] border-[1px] border-black px-4 py-2 text-black"
       />
       <button
         type="submit"
         className="w-full rounded-[10px] bg-gray-800 px-3 py-2 font-semibold text-white transition"
-        disabled={createBoard.isPending}
+        disabled={updateBoard.isPending}
       >
-        {createBoard.isPending ? <CircularProgress size={"20px"} /> : "Submit"}
+        {updateBoard.isPending ? <CircularProgress size={"20px"} /> : "Submit"}
       </button>
     </form>
   );

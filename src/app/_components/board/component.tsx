@@ -2,12 +2,17 @@
 
 import { ReactNode, useCallback, useState } from "react";
 import { cn } from "~/utils/cn";
-import { BsPencilSquare } from "react-icons/bs";
-import { BsTrashFill } from "react-icons/bs";
-import { BsPlusCircle } from "react-icons/bs";
-import { BsXCircle } from "react-icons/bs";
-
+import {
+  BsPencilSquare,
+  BsXCircleFill,
+  BsTrashFill,
+  BsPlusCircle,
+} from "react-icons/bs";
+import { useRouter } from "next/navigation";
 import { CreateBoard } from "./create";
+import { api } from "~/trpc/react";
+import { CircularProgress } from "@mui/material";
+import { EditBoard } from "./edit";
 
 function BoardLayout({
   children,
@@ -29,19 +34,43 @@ function BoardLayout({
 }
 
 export function Board({ id, name }: { id: string; name: string }) {
+  const router = useRouter();
+  const [showEditForm, setShowEditForm] = useState(false);
+
+  const deleteBoard = api.board.delete.useMutation({
+    onSuccess: () => {
+      router.refresh();
+    },
+  });
+
   return (
     <BoardLayout>
       <div className="flex gap-2">
-        <div>
-          <h3 className="font-bold">{id}</h3>
-          <h4>{name}</h4>
-        </div>
+        {showEditForm ? (
+          <EditBoard id={id} name={name} />
+        ) : (
+          <div>
+            <h3 className="font-bold">{id}</h3>
+            <h4>{name}</h4>
+          </div>
+        )}
         <div className="flex flex-col gap-3">
           <button className="text-[20px]">
-            <BsPencilSquare />
+            {showEditForm ? (
+              <BsXCircleFill onClick={() => setShowEditForm(false)} />
+            ) : (
+              <BsPencilSquare onClick={() => setShowEditForm(true)} />
+            )}
           </button>
-          <button className="text-[20px]">
-            <BsTrashFill />
+          <button
+            className="text-[20px]"
+            onClick={() => deleteBoard.mutate({ id })}
+          >
+            {deleteBoard.isPending ? (
+              <CircularProgress size={"20px"} className="text-black" />
+            ) : (
+              <BsTrashFill />
+            )}
           </button>
         </div>
       </div>
@@ -63,7 +92,7 @@ export function AddBoard() {
           <div className="flex gap-2">
             <CreateBoard />
             <h2 className="flex flex-col gap-2 text-[20px]">
-              <BsXCircle onClick={toggleFormOpened} />
+              <BsXCircleFill onClick={toggleFormOpened} />
             </h2>
           </div>
         ) : (
