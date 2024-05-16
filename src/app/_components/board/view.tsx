@@ -4,9 +4,7 @@ import { useCallback, useState } from "react";
 import { AddCard, Card, CardType } from "../card";
 import { BoardType } from "./types";
 import { Column as ColumnEnum } from "@prisma/client";
-import { usePathname, useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation";
-import { set } from "zod";
+import { useSearchUrl } from "../_hooks";
 
 const columnTitles = {
   IN_PROGRESS: "In Progress",
@@ -38,31 +36,6 @@ function Column({
       </div>
     </div>
   );
-}
-
-function useSearchUrl() {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const { replace } = useRouter();
-
-  const getParam = useCallback(
-    (param: string) => searchParams.get(param),
-    [searchParams],
-  );
-  const setParam = useCallback(
-    (param: string, value: string | null) => {
-      const params = new URLSearchParams(searchParams);
-      if (value) {
-        params.set(param, value);
-      } else {
-        params.delete(param);
-      }
-
-      replace(`${pathname}?${params.toString()}`);
-    },
-    [pathname, replace, searchParams],
-  );
-  return { getParam, setParam };
 }
 
 export function BoardView({ boards }: { boards: BoardType[] }) {
