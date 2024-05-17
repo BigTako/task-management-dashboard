@@ -28,7 +28,7 @@ export function Board({ id, name }: { id: string; name: string }) {
     <BoardLayout>
       <div className="flex gap-2">
         {showEditForm ? (
-          <EditBoard id={id} name={name} />
+          <EditBoard id={id} name={name} onSubmit={() => setShowEditForm(false)} />
         ) : (
           <div>
             <h3 className="font-bold">{id}</h3>

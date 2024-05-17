@@ -8,7 +8,7 @@ import { api } from '~/trpc/react';
 import { BoardType } from './types';
 import { InputError } from '../InputError';
 
-export function EditBoard({ id, name }: { id: string; name: string }) {
+export function EditBoard({ id, name, onSubmit }: { id: string; name: string; onSubmit?: () => void }) {
   const [newName, setNewName] = useState(name);
   const [boardErrors, setBoardErrors] = useState<Partial<Pick<BoardType, 'name'>>>({});
 
@@ -17,6 +17,7 @@ export function EditBoard({ id, name }: { id: string; name: string }) {
     onSuccess: () => {
       utils.board.invalidate();
       setBoardErrors({});
+      onSubmit?.();
     },
     onError: error => {
       const errorData = error.shape?.data.zodError?.fieldErrors as {
