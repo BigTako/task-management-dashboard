@@ -1,7 +1,7 @@
-import { Column } from "@prisma/client";
-import { z } from "zod";
+import { Column } from '@prisma/client';
+import { z } from 'zod';
 
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { createTRPCRouter, publicProcedure } from '~/server/api/trpc';
 
 export const boardRouter = createTRPCRouter({
   list: publicProcedure.query(async ({ ctx }) => {
@@ -11,80 +11,56 @@ export const boardRouter = createTRPCRouter({
       },
     });
   }),
-  one: publicProcedure
-    .input(z.object({ id: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const { id } = input;
-      return ctx.db.board.findUnique({ where: { id } });
-    }),
+  one: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
+    const { id } = input;
+    return ctx.db.board.findUnique({ where: { id } });
+  }),
   create: publicProcedure
-    .input(z.object({ name: z.string().min(1) }))
+    .input(
+      z.object({
+        name: z
+          .string()
+          .min(1, {
+            message: 'Board name should not be empty',
+          })
+          .max(128, {
+            message: 'Board name should contain at most 128 characters',
+          }),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       const { name } = input;
 
       return await ctx.db.board.create({
         data: {
-          name: input.name,
+          name,
         },
       });
     }),
-  createCard: publicProcedure
-    .input(
-      z.object({
-        title: z.string().min(1),
-        description: z.string().min(1),
-        column: z.string().refine((v) => Object.keys(Column).includes(v)),
-        boardId: z.string(),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      const { title, description, boardId } = input;
-      const column = input.column as Column;
-      return await ctx.db.board.update({
-        where: {
-          id: boardId,
-        },
-        data: {
-          cards: {
-            create: {
-              title,
-              description,
-              column,
-            },
-          },
-        },
-      });
-      // return await ctx.db.card.create({
-      //   data: {
-      //     title,
-      //     description,
-      //     column,
-      //     board: {
-      //       connect: {
-      //         id: boardId,
-      //       },
-      //     },
-      //   },
-      // });
-    }),
-
   update: publicProcedure
     .input(
       z.object({
         id: z.string(),
-        body: z.object({
-          name: z.string().min(1),
-        }),
+        name: z
+          .string()
+          .min(1, {
+            message: 'Board name should not be empty',
+          })
+          .max(128, {
+            message: 'Board name should contain at most 128 characters',
+          }),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { id, body: data } = input;
+      const { id, name } = input;
 
       return await ctx.db.board.update({
         where: {
           id,
         },
-        data,
+        data: {
+          name,
+        },
       });
     }),
 

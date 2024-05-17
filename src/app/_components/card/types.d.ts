@@ -1,4 +1,4 @@
-import { Column } from "@prisma/client";
+import { Column } from '@prisma/client';
 
 export interface CardType {
   id: string;

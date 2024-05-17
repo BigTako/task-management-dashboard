@@ -1,45 +1,26 @@
-"use client";
+'use client';
 
-import { ReactNode, useCallback, useState } from "react";
-import { cn } from "~/utils/cn";
-import {
-  BsPencilSquare,
-  BsXCircleFill,
-  BsTrashFill,
-  BsPlusCircle,
-} from "react-icons/bs";
-import { useRouter } from "next/navigation";
-import { CreateBoard } from "./create";
-import { api } from "~/trpc/react";
-import { CircularProgress } from "@mui/material";
-import { EditBoard } from "./edit";
+import { ReactNode, useCallback, useState } from 'react';
+import { cn } from '~/utils/cn';
+import { BsPencilSquare, BsXCircleFill, BsTrashFill, BsPlusCircle } from 'react-icons/bs';
+import { CreateBoard } from './create';
+import { api } from '~/trpc/react';
+import { CircularProgress } from '@mui/material';
+import { EditBoard } from './edit';
 
-function BoardLayout({
-  children,
-  className,
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
+function BoardLayout({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <div
-      className={cn(
-        "flex flex-col gap-2 rounded-[10px] bg-white p-3 text-gray-800",
-        className,
-      )}
-    >
-      {children}
-    </div>
+    <div className={cn('flex flex-col gap-2 rounded-[10px] bg-white p-3 text-gray-800', className)}>{children}</div>
   );
 }
 
 export function Board({ id, name }: { id: string; name: string }) {
-  const router = useRouter();
   const [showEditForm, setShowEditForm] = useState(false);
+  const utils = api.useUtils();
 
   const deleteBoard = api.board.delete.useMutation({
     onSuccess: () => {
-      router.refresh();
+      utils.board.invalidate();
     },
   });
 
@@ -62,15 +43,8 @@ export function Board({ id, name }: { id: string; name: string }) {
               <BsPencilSquare onClick={() => setShowEditForm(true)} />
             )}
           </button>
-          <button
-            className="text-[20px]"
-            onClick={() => deleteBoard.mutate({ id })}
-          >
-            {deleteBoard.isPending ? (
-              <CircularProgress size={"20px"} className="text-black" />
-            ) : (
-              <BsTrashFill />
-            )}
+          <button className="text-[20px]" onClick={() => deleteBoard.mutate({ id })}>
+            {deleteBoard.isPending ? <CircularProgress size={'20px'} className="text-black" /> : <BsTrashFill />}
           </button>
         </div>
       </div>
@@ -82,7 +56,7 @@ export function AddBoard() {
   const [formOpened, setFormOpened] = useState(false);
 
   const toggleFormOpened = useCallback(() => {
-    setFormOpened((v) => !v);
+    setFormOpened(v => !v);
   }, []);
 
   return (
@@ -96,10 +70,7 @@ export function AddBoard() {
             </h2>
           </div>
         ) : (
-          <h1
-            className="flex justify-center text-center text-2xl"
-            onClick={toggleFormOpened}
-          >
+          <h1 className="flex justify-center text-center text-2xl" onClick={toggleFormOpened}>
             <BsPlusCircle />
           </h1>
         )}

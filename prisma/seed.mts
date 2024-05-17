@@ -1,5 +1,5 @@
-import { faker } from "@faker-js/faker";
-import { Column, PrismaClient } from "@prisma/client";
+import { faker } from '@faker-js/faker';
+import { Column, PrismaClient } from '@prisma/client';
 
 function fakeCard() {
   return {
@@ -16,8 +16,8 @@ function fakeBoard() {
       create: Array.from({
         length: faker.helpers.rangeToNumber({ min: 1, max: 5 }),
       })
-        .fill("")
-        .map((_) => fakeCard()),
+        .fill('')
+        .map(_ => fakeCard()),
     },
   };
 }
@@ -25,7 +25,7 @@ function fakeBoard() {
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.$transaction(async (trx) => {
+  await prisma.$transaction(async trx => {
     await trx.board.deleteMany();
   });
 
@@ -40,7 +40,7 @@ main().then(
   async () => {
     await prisma.$disconnect();
   },
-  async (e) => {
+  async e => {
     console.error(e);
     await prisma.$disconnect();
     process.exit(1);

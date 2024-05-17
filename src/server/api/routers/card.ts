@@ -1,7 +1,7 @@
-import { Column, Prisma } from "@prisma/client";
-import { z } from "zod";
+import { Column, Prisma } from '@prisma/client';
+import { z } from 'zod';
 
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { createTRPCRouter, publicProcedure } from '~/server/api/trpc';
 
 export const cardRouter = createTRPCRouter({
   //   list: publicProcedure.query(async ({ ctx }) => {
@@ -29,20 +29,20 @@ export const cardRouter = createTRPCRouter({
         title: z
           .string()
           .min(1, {
-            message: "Title should not be empty",
+            message: 'Title should not be empty',
           })
           .max(128, {
-            message: "Title should contain at most 128 characters",
+            message: 'Title should contain at most 128 characters',
           }),
         description: z
           .string()
           .min(1, {
-            message: "Description should not be empty",
+            message: 'Description should not be empty',
           })
           .max(512, {
-            message: "Description should contain at most 512 characters",
+            message: 'Description should contain at most 512 characters',
           }),
-        column: z.string().refine((v) => Object.keys(Column).includes(v)),
+        column: z.string().refine(v => Object.keys(Column).includes(v)),
         boardId: z.string(),
       }),
     )
@@ -67,26 +67,37 @@ export const cardRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.string(),
-        body: z.object({
-          title: z.string().min(1).optional(),
-          description: z.string().min(1).optional(),
-          column: z
-            .string()
-            .optional()
-            .refine((v) => {
-              if (v) return Object.keys(Column).includes(v);
-              return true;
-            }),
-        }),
+        title: z
+          .string()
+          .min(1, {
+            message: 'Title should not be empty',
+          })
+          .max(128, {
+            message: 'Title should contain at most 128 characters',
+          })
+          .optional(),
+        description: z
+          .string()
+          .min(1, {
+            message: 'Description should not be empty',
+          })
+          .max(512, {
+            message: 'Description should contain at most 512 characters',
+          })
+          .optional(),
+        column: z
+          .string()
+          .optional()
+          .refine(v => {
+            if (v) return Object.keys(Column).includes(v);
+            return true;
+          }),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const {
-        id,
-        body: { title, description },
-      } = input;
+      const { id, title, description } = input;
 
-      const column = input.body.column as Column;
+      const column = input.column as Column;
 
       return await ctx.db.card.update({
         where: {

@@ -1,44 +1,18 @@
-import { ReactNode, useCallback, useState } from "react";
-import {
-  BsPencilSquare,
-  BsPlusCircle,
-  BsTrashFill,
-  BsXCircleFill,
-} from "react-icons/bs";
-import { cn } from "~/utils/cn";
-import { api } from "~/trpc/react";
-import { CreateCard } from "./create";
-import { Column } from "@prisma/client";
-import { EditCard } from "./edit";
+import { ReactNode, useCallback, useState } from 'react';
+import { BsPencilSquare, BsPlusCircle, BsTrashFill, BsXCircleFill } from 'react-icons/bs';
+import { cn } from '~/utils/cn';
+import { api } from '~/trpc/react';
+import { CreateCard } from './create';
+import { Column } from '@prisma/client';
+import { EditCard } from './edit';
 
-function CardLayout({
-  children,
-  className,
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
+function CardLayout({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <div
-      className={cn(
-        "flex flex-col gap-2 rounded-[10px] bg-white p-3 text-gray-800",
-        className,
-      )}
-    >
-      {children}
-    </div>
+    <div className={cn('flex flex-col gap-2 rounded-[10px] bg-white p-3 text-gray-800', className)}>{children}</div>
   );
 }
 
-export function Card({
-  id,
-  title,
-  description,
-}: {
-  id: string;
-  title: string;
-  description: string;
-}) {
+export function Card({ id, title, description }: { id: string; title: string; description: string }) {
   const [editFormOpened, setEditFormOpened] = useState(false);
   const utils = api.useUtils();
 
@@ -60,16 +34,10 @@ export function Card({
           </div>
         )}
         <div className="flex flex-col gap-3">
-          <button
-            className="text-[20px]"
-            onClick={() => setEditFormOpened((v) => !v)}
-          >
+          <button className="text-[20px]" onClick={() => setEditFormOpened(v => !v)}>
             {editFormOpened ? <BsXCircleFill /> : <BsPencilSquare />}
           </button>
-          <button
-            className="text-[20px]"
-            onClick={() => deleteCard.mutate({ id })}
-          >
+          <button className="text-[20px]" onClick={() => deleteCard.mutate({ id })}>
             <BsTrashFill />
           </button>
         </div>
@@ -78,17 +46,11 @@ export function Card({
   );
 }
 
-export function AddCard({
-  boardId,
-  column,
-}: {
-  boardId: string;
-  column: Column;
-}) {
+export function AddCard({ boardId, column }: { boardId: string; column: Column }) {
   const [formOpened, setFormOpened] = useState(false);
 
   const toggleFormOpened = useCallback(() => {
-    setFormOpened((v) => !v);
+    setFormOpened(v => !v);
   }, []);
 
   return (
@@ -103,10 +65,7 @@ export function AddCard({
             </h2>
           </div>
         ) : (
-          <h1
-            className="flex justify-center text-center text-2xl"
-            onClick={toggleFormOpened}
-          >
+          <h1 className="flex justify-center text-center text-2xl" onClick={toggleFormOpened}>
             <BsPlusCircle />
           </h1>
         )}
