@@ -1,7 +1,6 @@
 'use client';
 
 import { CircularProgress } from '@mui/material';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { api } from '~/trpc/react';
@@ -14,12 +13,10 @@ export function CreateCard({ boardId, column }: { boardId: string; column: Colum
 
   const [cardErrors, setCardErrors] = useState<Partial<Pick<CardType, 'title' | 'description'>>>({});
 
-  const router = useRouter();
   const utils = api.useUtils();
   const createCard = api.card.create.useMutation({
     onSuccess: async () => {
-      router.refresh();
-      await utils.board.invalidate();
+      await utils.board.one.invalidate({ id: boardId });
       setCardData({ title: '', description: '' });
       setCardErrors({ title: '', description: '' });
     },

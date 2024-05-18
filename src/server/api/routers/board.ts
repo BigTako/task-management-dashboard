@@ -5,15 +5,11 @@ import { createTRPCRouter, publicProcedure } from '~/server/api/trpc';
 
 export const boardRouter = createTRPCRouter({
   list: publicProcedure.query(async ({ ctx }) => {
-    return ctx.db.board.findMany({
-      include: {
-        cards: true,
-      },
-    });
+    return ctx.db.board.findMany();
   }),
   one: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
     const { id } = input;
-    return ctx.db.board.findUnique({ where: { id } });
+    return ctx.db.board.findUnique({ where: { id }, include: { cards: true } });
   }),
   create: publicProcedure
     .input(

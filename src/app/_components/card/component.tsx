@@ -5,6 +5,7 @@ import { api } from '~/trpc/react';
 import { CreateCard } from './create';
 import { Column } from '@prisma/client';
 import { EditCard } from './edit';
+import { CardType } from './types';
 
 function CardLayout({ children, className }: { children: ReactNode; className?: string }) {
   return (
@@ -12,13 +13,15 @@ function CardLayout({ children, className }: { children: ReactNode; className?: 
   );
 }
 
-export function Card({ id, title, description }: { id: string; title: string; description: string }) {
+export function Card({ card }: { card: CardType }) {
+  const { id, title, description } = card;
+
   const [editFormOpened, setEditFormOpened] = useState(false);
   const utils = api.useUtils();
 
   const deleteCard = api.card.delete.useMutation({
     onSuccess: async () => {
-      await utils.board.invalidate();
+      await utils.board.one.invalidate({ id: card.boardId });
     },
   });
 

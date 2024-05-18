@@ -18,7 +18,7 @@ export default function Home() {
         ))}
         <AddBoard />
       </div>
-      <BoardView boards={boards} />
+      <BoardView />
     </main>
   );
 }

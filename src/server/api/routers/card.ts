@@ -21,6 +21,13 @@ export const cardRouter = createTRPCRouter({
           boardId: input.boardId,
           column: input.column as Column,
         },
+        include: {
+          board: {
+            select: {
+              id: true,
+            },
+          },
+        },
       });
     }),
   create: publicProcedure
