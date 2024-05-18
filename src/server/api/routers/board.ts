@@ -9,7 +9,18 @@ export const boardRouter = createTRPCRouter({
   }),
   one: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
     const { id } = input;
-    return ctx.db.board.findUnique({ where: { id }, include: { cards: true } });
+    return ctx.db.board.findUnique({
+      where: { id },
+      include: {
+        cards: {
+          orderBy: [
+            {
+              position: 'asc',
+            },
+          ],
+        },
+      },
+    });
   }),
   create: publicProcedure
     .input(
