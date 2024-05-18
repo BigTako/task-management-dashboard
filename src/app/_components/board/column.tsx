@@ -14,6 +14,7 @@ export function Column({
   cards: CardType[];
   boardId: string;
 }) {
+  const lastPosition = cards[cards.length - 1]?.position ?? 0;
   return (
     <div className="flex max-w-[33.33%] grow flex-col gap-2">
       <h3 className="text-center font-bold">{title}</h3>
@@ -34,7 +35,7 @@ export function Column({
             );
           }}
         </Droppable>
-        <AddCard boardId={boardId} column={name} />
+        <AddCard boardId={boardId} column={name} lastPosition={lastPosition} />
       </div>
     </div>
   );

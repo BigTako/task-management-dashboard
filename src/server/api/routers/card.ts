@@ -50,17 +50,19 @@ export const cardRouter = createTRPCRouter({
             message: 'Description should contain at most 512 characters',
           }),
         column: z.string().refine(v => Object.keys(Column).includes(v)),
+        position: z.number(),
         boardId: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { title, description, boardId } = input;
+      const { title, description, boardId, position } = input;
       const column = input.column as Column;
       return await ctx.db.card.create({
         data: {
           title,
           description,
           column,
+          position,
           board: {
             connect: {
               id: boardId,

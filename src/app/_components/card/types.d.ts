@@ -5,6 +5,7 @@ export interface CardType {
   title: string;
   description: string;
   column: Column;
+  position: number;
   boardId: string;
   createdAt: Date;
 }

@@ -8,7 +8,15 @@ import { CardType } from './types';
 import { Column } from '@prisma/client';
 import { InputError } from '../InputError';
 
-export function CreateCard({ boardId, column }: { boardId: string; column: Column }) {
+export function CreateCard({
+  boardId,
+  column,
+  lastPosition,
+}: {
+  boardId: string;
+  column: Column;
+  lastPosition: number;
+}) {
   const [cardData, setCardData] = useState<Pick<CardType, 'title' | 'description'>>({ title: '', description: '' });
 
   const [cardErrors, setCardErrors] = useState<Partial<Pick<CardType, 'title' | 'description'>>>({});
@@ -38,7 +46,7 @@ export function CreateCard({ boardId, column }: { boardId: string; column: Colum
     <form
       onSubmit={async e => {
         e.preventDefault();
-        createCard.mutate({ title, description, column, boardId });
+        createCard.mutate({ title, description, column, boardId, position: lastPosition + 1 });
       }}
       className="flex grow flex-col items-center justify-end gap-2"
     >
