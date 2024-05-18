@@ -1,23 +1,32 @@
 import { faker } from '@faker-js/faker';
 import { Column, PrismaClient } from '@prisma/client';
 
-function fakeCard() {
+function fakeCard({ index, column }: { index: number; column: Column }) {
   return {
-    title: faker.lorem.words({ min: 1, max: 5 }),
+    title: String(index),
     description: faker.lorem.words({ min: 5, max: 20 }),
-    column: faker.helpers.arrayElement(Object.keys(Column)) as Column,
+    column,
+    position: index,
   };
 }
 
+function fakeCardsArray({ column }: { column: Column }) {
+  return Array.from({
+    length: faker.helpers.rangeToNumber({ min: 1, max: 5 }),
+  })
+    .fill('')
+    .map((_, i) => fakeCard({ index: i, column }));
+}
+
 function fakeBoard() {
+  const toDoCards = fakeCardsArray({ column: Column.TO_DO });
+  const inProgressCards = fakeCardsArray({ column: Column.IN_PROGRESS });
+  const doneCards = fakeCardsArray({ column: Column.DONE });
+
   return {
     name: faker.lorem.words({ min: 1, max: 5 }),
     cards: {
-      create: Array.from({
-        length: faker.helpers.rangeToNumber({ min: 1, max: 5 }),
-      })
-        .fill('')
-        .map(_ => fakeCard()),
+      create: [...toDoCards, ...inProgressCards, ...doneCards],
     },
   };
 }

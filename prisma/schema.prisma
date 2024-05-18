@@ -23,6 +23,7 @@ model Card {
   boardId     String
   board       Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
   column      Column
+  position    Int
   createdAt   DateTime @default(now())
 }
 
