@@ -50,7 +50,7 @@ export function Card({ card }: { card: CardType }) {
   );
 }
 
-export function AddCard({ boardId, column, lastPosition }: { boardId: string; column: Column; lastPosition: number }) {
+export function AddCard({ boardId, column }: { boardId: string; column: Column }) {
   const [formOpened, setFormOpened] = useState(false);
 
   const toggleFormOpened = useCallback(() => {
@@ -62,7 +62,7 @@ export function AddCard({ boardId, column, lastPosition }: { boardId: string; co
       <div>
         {formOpened ? (
           <div className="flex gap-2">
-            <CreateCard boardId={boardId} column={column} lastPosition={lastPosition} />
+            <CreateCard boardId={boardId} column={column} />
             {/* <CreateBoard /> */}
             <h2 className="flex flex-col gap-2 text-[20px]">
               <BsXCircleFill onClick={toggleFormOpened} />
