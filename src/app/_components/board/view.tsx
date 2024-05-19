@@ -35,41 +35,25 @@ export function BoardView() {
 
       const isSameColumn = data.toColumn === foundedCard.column;
 
-      let cards;
-
-      if (isSameColumn) {
-        const { curColumn, rest } = prevData.cards.reduce(
-          (r: { curColumn: Card[]; rest: Card[] }, o: Card) => {
-            if (o.id !== foundedCard.id) {
-              const isCurrentColumn = o.column === data.toColumn;
-              r[isCurrentColumn ? 'curColumn' : 'rest'].push(o);
-            }
-            return r;
-          },
-          { curColumn: [] as Card[], rest: [] as Card[] },
-        );
-
-        curColumn.splice(data.toPosition, 0, { ...foundedCard, position: data.toPosition });
-        const temp = curColumn.map((card, i) => ({ ...card, position: i }));
-
-        console.log({ temp });
-        cards = [...rest, ...temp].sort((a, b) => a.position - b.position);
-      } else {
-        let num = 0;
-        cards = prevData.cards.map(card => {
-          if (card.column === data.toColumn) {
-            num += 1;
-            return { ...card, position: num - 1 };
+      const { curColumn, rest } = prevData.cards.reduce(
+        (r: { curColumn: Card[]; rest: Card[] }, o: Card) => {
+          if (o.id !== foundedCard.id) {
+            const isCurrentColumn = o.column === data.toColumn;
+            r[isCurrentColumn ? 'curColumn' : 'rest'].push(o);
           }
-          if (card.id === data.id) {
-            num += 1;
-            return { ...card, position: num - 1, column: data.toColumn as ColumnEnum };
-          }
-          return card;
-        }) as Card[];
-      }
+          return r;
+        },
+        { curColumn: [] as Card[], rest: [] as Card[] },
+      );
 
-      // Get the data from the queryCache
+      curColumn.splice(data.toPosition, 0, {
+        ...foundedCard,
+        column: isSameColumn ? foundedCard.column : (data.toColumn as ColumnEnum),
+        position: data.toPosition,
+      });
+      const temp = curColumn.map((card, i) => ({ ...card, position: i }));
+
+      const cards = [...rest, ...temp].sort((a, b) => a.position - b.position);
 
       utils.board.one.setData({ id: seachBoardId }, { ...prevData, cards });
     },
@@ -93,9 +77,6 @@ export function BoardView() {
 
       <div className="flex h-full gap-3">
         <DragDropContext
-          // onDragStart={result => {
-          //   console.log({ result });
-          // }}
           onDragEnd={result => {
             const { source, destination } = result;
 
@@ -111,12 +92,6 @@ export function BoardView() {
               toColumn: destination.droppableId,
               toPosition: destination.index,
             });
-            // moveCard.mutate({
-            //   id: result.draggableId,
-            //   boardId: seachBoardId,
-            //   source: { position: source.index, column: source.droppableId as ColumnEnum },
-            //   destination: { position: destination.index, column: destination.droppableId as ColumnEnum },
-            // });
           }}
         >
           {Object.entries(columnTitles).map(ent => {
