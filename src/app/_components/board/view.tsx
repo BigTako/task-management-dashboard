@@ -22,26 +22,31 @@ export function BoardView() {
 
   const { data: curBoard, isLoading: curBoardLoading } = api.board.one.useQuery({ id: seachBoardId });
 
-  const updateCard = api.card.update.useMutation({
-    onMutate: async cardChangedData => {
-      // Cancel outgoing fetches (so they don't overwrite our optimistic update)
-      if (!cardChangedData.column || !Object.keys(ColumnEnum).includes(cardChangedData.column)) {
-        return;
-      }
-
+  const moveCard = api.card.move.useMutation({
+    // optimistic update
+    onMutate: async data => {
       await utils.board.one.cancel({ id: seachBoardId });
-
       // Get the data from the queryCache
       const prevData = utils.board.one.getData({ id: seachBoardId });
-      const changedCard = prevData?.cards.find(c => c.id === cardChangedData.id);
+      const { id: cardId, source, destination } = data;
+      if (!prevData) return;
 
-      if (!changedCard || !prevData) return;
+      const updatedCards = prevData.cards
+        .map(card => {
+          if (card.column === source.column && card.position > source.position) {
+            return { ...card, position: card.position - 1 };
+          }
+          if (card.column === destination.column && card.position >= destination.position) {
+            return { ...card, position: card.position + 1 };
+          }
+          if (card.id === cardId) {
+            return { ...card, position: destination.position, column: destination.column as ColumnEnum };
+          }
+          return card;
+        })
+        .sort((a, b) => a.position - b.position);
 
-      const newCards = prevData.cards.map(c =>
-        c.id === changedCard.id ? { ...c, column: cardChangedData.column as ColumnEnum } : c,
-      );
-
-      utils.board.one.setData({ id: seachBoardId }, { ...prevData, cards: newCards });
+      utils.board.one.setData({ id: seachBoardId }, { ...prevData, cards: updatedCards });
     },
   });
 
@@ -64,8 +69,18 @@ export function BoardView() {
       <div className="flex h-full gap-3">
         <DragDropContext
           onDragEnd={result => {
-            console.log(result);
-            updateCard.mutate({ id: result.draggableId, column: result.destination?.droppableId });
+            const { source, destination } = result;
+
+            if (!source || !destination) {
+              return;
+            }
+
+            moveCard.mutate({
+              id: result.draggableId,
+              boardId: seachBoardId,
+              source: { position: source.index, column: source.droppableId as ColumnEnum },
+              destination: { position: destination.index, column: destination.droppableId as ColumnEnum },
+            });
           }}
         >
           {Object.entries(columnTitles).map(ent => {

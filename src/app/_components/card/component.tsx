@@ -14,7 +14,7 @@ function CardLayout({ children, className }: { children: ReactNode; className?: 
 }
 
 export function Card({ card }: { card: CardType }) {
-  const { id, title, description } = card;
+  const { id, title, description, position } = card;
 
   const [editFormOpened, setEditFormOpened] = useState(false);
   const utils = api.useUtils();
@@ -34,6 +34,7 @@ export function Card({ card }: { card: CardType }) {
           <div>
             <div className="font-bold">{title}</div>
             <div>{description}</div>
+            <div>{position}</div>
           </div>
         )}
         <div className="flex flex-col gap-3">

@@ -72,6 +72,59 @@ export const cardRouter = createTRPCRouter({
       });
     }),
 
+  move: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        boardId: z.string(),
+        source: z.object({ position: z.number(), column: z.string() }),
+        destination: z.object({ position: z.number(), column: z.string() }),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id, source, destination, boardId } = input;
+
+      // update cards which go fater moved in source column
+      await ctx.db.card.updateMany({
+        where: {
+          boardId,
+          column: source.column as Column,
+          position: {
+            gt: source.position,
+          },
+        },
+        data: {
+          position: {
+            decrement: 1,
+          },
+        },
+      });
+
+      await ctx.db.card.updateMany({
+        where: {
+          boardId,
+          column: destination.column as Column,
+          position: {
+            gte: destination.position,
+          },
+        },
+        data: {
+          position: {
+            increment: 1,
+          },
+        },
+      });
+
+      return await ctx.db.card.update({
+        where: {
+          id,
+        },
+        data: {
+          position: destination.position,
+          column: destination.column as Column,
+        },
+      });
+    }),
   update: publicProcedure
     .input(
       z.object({
