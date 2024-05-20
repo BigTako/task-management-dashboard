@@ -14,14 +14,14 @@ export function BoardSearch() {
 
   return (
     <div className="flex gap-4">
-      <div className="h-[40px] w-full rounded-[20px] bg-[#D9E4DD] p-2 text-inherit">
+      <div className="text-inherit  w-full rounded-[20px] bg-avocado-light p-3">
         <input
-          className="h-full w-full bg-inherit outline-none"
+          className="h-full w-full bg-avocado-light outline-none"
           defaultValue={seachBoardId}
           onChange={e => setBoardId(e.target.value)}
         />
       </div>
-      <button className="rounded-[20px] bg-[#D9E4DD] px-3 font-bold text-inherit" onClick={handleSearch}>
+      <button className="text-inherit rounded-[20px] bg-avocado-light px-3 font-bold" onClick={handleSearch}>
         Load
       </button>
     </div>

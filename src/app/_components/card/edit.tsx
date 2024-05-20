@@ -47,7 +47,7 @@ export function EditCard({ id, onSubmit }: { id: string; onSubmit: () => void })
         placeholder="Title"
         value={title}
         onChange={e => setCardData(v => ({ ...v, title: e.target.value }))}
-        className="w-full rounded-[10px] bg-[#CDC9C3] px-4 py-2 text-[#555555] placeholder-[#555555] outline-none"
+        className="w-full rounded-[10px] bg-sandy-semilight px-4 py-2 text-sandy-dark placeholder-sandy-dark outline-none"
       />
       <InputError>{cardErrors.title}</InputError>
       <input
@@ -55,12 +55,12 @@ export function EditCard({ id, onSubmit }: { id: string; onSubmit: () => void })
         placeholder="Descripton"
         value={description}
         onChange={e => setCardData(v => ({ ...v, description: e.target.value }))}
-        className="w-full rounded-[10px] bg-[#CDC9C3] px-4 py-2 text-[#555555] placeholder-[#555555] outline-none"
+        className="w-full rounded-[10px] bg-sandy-semilight px-4 py-2 text-sandy-dark placeholder-sandy-dark outline-none"
       />
       <InputError>{cardErrors.description}</InputError>
       <button
         type="submit"
-        className="w-full rounded-[10px] bg-[#555555] px-3 py-2 font-semibold text-white transition"
+        className="w-full rounded-[10px] bg-sandy-dark px-3 py-2 font-semibold text-white transition"
         disabled={editCard.isPending}
       >
         {editCard.isPending ? <CircularProgress size={'20px'} /> : 'Submit'}

@@ -10,7 +10,7 @@ import { EditBoard } from './edit';
 
 function BoardLayout({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <div className={cn('flex flex-col gap-2 rounded-[10px] bg-[#CDC9C3] p-3 text-[#555555]', className)}>
+    <div className={cn('flex flex-col gap-2 rounded-[10px] bg-sandy-semilight p-3 text-sandy-dark', className)}>
       {children}
     </div>
   );

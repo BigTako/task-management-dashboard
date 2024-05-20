@@ -9,7 +9,9 @@ import { CardType } from './types';
 
 function CardLayout({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <div className={cn('flex flex-col gap-2 rounded-[10px] bg-[#FBF7F0] p-3 text-inherit', className)}>{children}</div>
+    <div className={cn('text-inherit flex flex-col gap-2 rounded-[10px] bg-sandy-light p-3', className)}>
+      {children}
+    </div>
   );
 }
 

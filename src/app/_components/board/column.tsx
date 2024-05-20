@@ -17,7 +17,7 @@ export function Column({
   return (
     <div className="flex w-[33.33%] grow flex-col gap-2">
       <h3 className="text-center font-bold">{title}</h3>
-      <div className="flex h-full flex-col gap-3 overflow-y-auto rounded-[20px]  bg-[#CDC9C3] p-2 text-center">
+      <div className="flex h-full flex-col gap-3 overflow-y-auto rounded-[20px]  bg-sandy-semilight p-2 text-center">
         <Droppable droppableId={name} key={name}>
           {provided => {
             return (
