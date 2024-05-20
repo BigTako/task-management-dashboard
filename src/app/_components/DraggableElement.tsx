@@ -1,5 +1,5 @@
-import { ReactNode } from 'react';
-import { Draggable, DraggableProvided } from 'react-beautiful-dnd';
+import type { ReactNode } from 'react';
+import { Draggable, type DraggableProvided } from 'react-beautiful-dnd';
 
 type DraggableCardProps = {
   id: string;

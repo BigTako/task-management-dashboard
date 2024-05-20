@@ -9,7 +9,6 @@ import { useState } from 'react';
 import SuperJSON from 'superjson';
 
 import { type AppRouter } from '~/server/api/root';
-import { BrowserRouter } from 'react-router-dom';
 
 const createQueryClient = () => new QueryClient();
 
@@ -67,7 +66,7 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
       <ReactQueryDevtools initialIsOpen={false} client={queryClient} />
 
       <api.Provider client={trpcClient} queryClient={queryClient}>
-        <BrowserRouter>{props.children}</BrowserRouter>
+        {props.children}
       </api.Provider>
     </QueryClientProvider>
   );

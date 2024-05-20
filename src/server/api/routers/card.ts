@@ -1,5 +1,4 @@
-import { de } from '@faker-js/faker';
-import { Column, Prisma } from '@prisma/client';
+import { Column } from '@prisma/client';
 import { z } from 'zod';
 
 import { createTRPCRouter, publicProcedure } from '~/server/api/trpc';
@@ -102,7 +101,7 @@ export const cardRouter = createTRPCRouter({
         const columns = await ctx.db.card.findMany({
           where: {
             boardId,
-            column: foundedCard.column as Column,
+            column: foundedCard.column,
             id: {
               not: {
                 equals: id,
@@ -130,7 +129,7 @@ export const cardRouter = createTRPCRouter({
       const oldColumnCards = await ctx.db.card.findMany({
         where: {
           boardId,
-          column: foundedCard.column as Column,
+          column: foundedCard.column,
           id: {
             not: {
               equals: id,

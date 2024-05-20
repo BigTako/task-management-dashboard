@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useCallback, useState } from 'react';
+import { type ReactNode, useCallback, useState } from 'react';
 import { cn } from '~/utils/cn';
 import { BsPencilSquare, BsXCircleFill, BsTrashFill, BsPlusCircle } from 'react-icons/bs';
 import { CreateBoard } from './create';
@@ -10,7 +10,7 @@ import { EditBoard } from './edit';
 
 function BoardLayout({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <div className={cn('flex flex-col gap-2 rounded-[10px] bg-sandy-semilight p-3 text-sandy-dark', className)}>
+    <div className={cn('bg-sandy-semilight text-sandy-dark flex flex-col gap-2 rounded-[10px] p-3', className)}>
       {children}
     </div>
   );
@@ -21,8 +21,8 @@ export function Board({ id, name }: { id: string; name: string }) {
   const utils = api.useUtils();
 
   const deleteBoard = api.board.delete.useMutation({
-    onSuccess: () => {
-      utils.board.invalidate();
+    onSuccess: async () => {
+      await utils.board.invalidate();
     },
   });
 

@@ -5,6 +5,7 @@ export default {
   content: ['./src/**/*.tsx'],
   theme: {
     colors: {
+      red: '#c41a22',
       white: '#FFF',
       black: '#000',
       'avocado-light': '#D9E4DD',

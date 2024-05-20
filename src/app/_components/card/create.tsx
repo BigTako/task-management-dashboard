@@ -4,8 +4,8 @@ import { CircularProgress } from '@mui/material';
 import { useState } from 'react';
 
 import { api } from '~/trpc/react';
-import { CardType } from './types';
-import { Column } from '@prisma/client';
+import type { CardType } from './types';
+import type { Column } from '@prisma/client';
 import { InputError } from '../InputError';
 
 export function CreateCard({ boardId, column }: { boardId: string; column: Column }) {
@@ -66,7 +66,7 @@ export function CreateCard({ boardId, column }: { boardId: string; column: Colum
         placeholder="Title"
         value={title}
         onChange={e => setCardData(v => ({ ...v, title: e.target.value }))}
-        className="w-full rounded-[10px] bg-sandy-semilight px-4 py-2 text-sandy-dark placeholder-sandy-dark outline-none"
+        className="bg-sandy-semilight text-sandy-dark placeholder-sandy-dark w-full rounded-[10px] px-4 py-2 outline-none"
       />
       <InputError>{cardErrors.title}</InputError>
       <input
@@ -74,12 +74,12 @@ export function CreateCard({ boardId, column }: { boardId: string; column: Colum
         placeholder="Descripton"
         value={description}
         onChange={e => setCardData(v => ({ ...v, description: e.target.value }))}
-        className="text-inherit w-full rounded-[10px] bg-sandy-semilight px-4 py-2 placeholder-sandy-dark outline-none "
+        className="bg-sandy-semilight placeholder-sandy-dark w-full rounded-[10px] px-4 py-2 text-inherit outline-none "
       />
       <InputError>{cardErrors.description}</InputError>
       <button
         type="submit"
-        className="w-full rounded-[10px] bg-sandy-dark px-3 py-2 font-semibold text-white transition"
+        className="bg-sandy-dark w-full rounded-[10px] px-3 py-2 font-semibold text-white transition"
         disabled={createCard.isPending}
       >
         {createCard.isPending ? <CircularProgress size={'20px'} /> : 'Submit'}

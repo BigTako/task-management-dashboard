@@ -10,18 +10,18 @@ export function BoardSearch() {
 
   const handleSearch = useCallback(() => {
     setParam('board', boardId);
-  }, [boardId]);
+  }, [boardId, setParam]);
 
   return (
     <div className="flex gap-4">
-      <div className="text-inherit  w-full rounded-[20px] bg-avocado-light p-3">
+      <div className="bg-avocado-light  w-full rounded-[20px] p-3 text-inherit">
         <input
-          className="h-full w-full bg-avocado-light outline-none"
+          className="bg-avocado-light h-full w-full outline-none"
           defaultValue={seachBoardId}
           onChange={e => setBoardId(e.target.value)}
         />
       </div>
-      <button className="text-inherit rounded-[20px] bg-avocado-light px-3 font-bold" onClick={handleSearch}>
+      <button className="bg-avocado-light rounded-[20px] px-3 font-bold text-inherit" onClick={handleSearch}>
         Load
       </button>
     </div>

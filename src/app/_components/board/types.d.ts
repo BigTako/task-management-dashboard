@@ -1,4 +1,4 @@
-import { CardType } from '../card';
+import type { CardType } from '../card';
 
 export interface BoardType {
   id: string;

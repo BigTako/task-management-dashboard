@@ -1,22 +1,24 @@
-import { ReactNode, useCallback, useState } from 'react';
+'use client';
+
+import { type ReactNode, useCallback, useState } from 'react';
 import { BsPencilSquare, BsPlusCircle, BsTrashFill, BsXCircleFill } from 'react-icons/bs';
 import { cn } from '~/utils/cn';
 import { api } from '~/trpc/react';
 import { CreateCard } from './create';
-import { Column } from '@prisma/client';
+import type { Column } from '@prisma/client';
 import { EditCard } from './edit';
-import { CardType } from './types';
+import type { CardType } from './types';
 
 function CardLayout({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <div className={cn('text-inherit flex flex-col gap-2 rounded-[10px] bg-sandy-light p-3', className)}>
+    <div className={cn('bg-sandy-light flex flex-col gap-2 rounded-[10px] p-3 text-inherit', className)}>
       {children}
     </div>
   );
 }
 
 export function Card({ card }: { card: CardType }) {
-  const { id, title, description, position } = card;
+  const { id, title, description } = card;
 
   const [editFormOpened, setEditFormOpened] = useState(false);
   const utils = api.useUtils();

@@ -1,11 +1,10 @@
 'use client';
 
 import { CircularProgress } from '@mui/material';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { api } from '~/trpc/react';
-import { BoardType } from './types';
+import type { BoardType } from './types';
 import { InputError } from '../InputError';
 
 export function CreateBoard() {
@@ -15,8 +14,8 @@ export function CreateBoard() {
   const utils = api.useUtils();
 
   const createBoard = api.board.create.useMutation({
-    onSuccess: () => {
-      utils.board.invalidate();
+    onSuccess: async () => {
+      await utils.board.invalidate();
       setName('');
       setBoardErrors({});
     },
@@ -43,12 +42,12 @@ export function CreateBoard() {
         placeholder="Title"
         value={name}
         onChange={e => setName(e.target.value)}
-        className="text-inherit w-full rounded-[10px] bg-sandy-light px-4 py-2 outline-none"
+        className="bg-sandy-light w-full rounded-[10px] px-4 py-2 text-inherit outline-none"
       />
       <InputError>{boardErrors.name}</InputError>
       <button
         type="submit"
-        className="w-full rounded-[10px] bg-sandy-dark px-3 py-2 font-semibold text-white transition"
+        className="bg-sandy-dark w-full rounded-[10px] px-3 py-2 font-semibold text-white transition"
         disabled={createBoard.isPending}
       >
         {createBoard.isPending ? <CircularProgress size={'20px'} /> : 'Submit'}

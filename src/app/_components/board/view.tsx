@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, Column as ColumnEnum } from '@prisma/client';
+import type { Card, Column as ColumnEnum } from '@prisma/client';
 import { useSearchUrl } from '../_hooks';
 import { BoardSearch } from './search';
 import { DragDropContext } from 'react-beautiful-dnd';
@@ -100,8 +100,10 @@ export function BoardView() {
         >
           {Object.entries(columnTitles).map(ent => {
             const [columnName, columnTitle] = ent as [ColumnEnum, string];
-            const cards = cardsByColumn({ columnName: columnName as ColumnEnum });
-            return <Column name={columnName} title={columnTitle} cards={cards} boardId={seachBoardId} />;
+            const cards = cardsByColumn({ columnName });
+            return (
+              <Column key={columnName} name={columnName} title={columnTitle} cards={cards} boardId={seachBoardId} />
+            );
           })}
         </DragDropContext>
       </div>
