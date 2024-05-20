@@ -4,7 +4,7 @@ import { CircularProgress } from '@mui/material';
 import { useState } from 'react';
 
 import { api } from '~/trpc/react';
-import type { CardType } from './types';
+import { type Card as CardType } from '@prisma/client';
 import { InputError } from '../InputError';
 
 export function EditCard({ id, onSubmit }: { id: string; onSubmit: () => void }) {

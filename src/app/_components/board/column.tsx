@@ -1,7 +1,8 @@
 import { Droppable } from 'react-beautiful-dnd';
-import { AddCard, Card, type CardType } from '../card';
+import { AddCard, Card } from '../card';
 import type { Column as ColumnEnum } from '@prisma/client';
 import { DraggableElement } from '../DraggableElement';
+import { type Card as CardType } from '@prisma/client';
 
 export function Column({
   name,

@@ -4,7 +4,7 @@ import { CircularProgress } from '@mui/material';
 import { useState } from 'react';
 
 import { api } from '~/trpc/react';
-import type { BoardType } from './types';
+import { type Board as BoardType } from '@prisma/client';
 import { InputError } from '../InputError';
 
 export function CreateBoard() {

@@ -7,7 +7,7 @@ import { api } from '~/trpc/react';
 import { CreateCard } from './create';
 import type { Column } from '@prisma/client';
 import { EditCard } from './edit';
-import type { CardType } from './types';
+import { type Card as CardType } from '@prisma/client';
 import { CircularProgress } from '@mui/material';
 
 function CardLayout({ children, className }: { children: ReactNode; className?: string }) {
