@@ -9,7 +9,7 @@ import { CardType } from './types';
 
 function CardLayout({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <div className={cn('flex flex-col gap-2 rounded-[10px] bg-white p-3 text-gray-800', className)}>{children}</div>
+    <div className={cn('flex flex-col gap-2 rounded-[10px] bg-[#FBF7F0] p-3 text-inherit', className)}>{children}</div>
   );
 }
 
@@ -34,7 +34,6 @@ export function Card({ card }: { card: CardType }) {
           <div>
             <div className="font-bold">{title}</div>
             <div>{description}</div>
-            <div>{position}</div>
           </div>
         )}
         <div className="flex flex-col gap-3">

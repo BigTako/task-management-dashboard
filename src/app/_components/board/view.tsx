@@ -7,6 +7,8 @@ import { DragDropContext } from 'react-beautiful-dnd';
 import { api } from '~/trpc/react';
 import { CircularProgress } from '@mui/material';
 import { Column } from './column';
+import { useCallback } from 'react';
+
 const columnTitles = {
   IN_PROGRESS: 'In Progress',
   TO_DO: 'To Do',
@@ -51,6 +53,7 @@ export function BoardView() {
         column: isSameColumn ? foundedCard.column : (data.toColumn as ColumnEnum),
         position: data.toPosition,
       });
+
       const temp = curColumn.map((card, i) => ({ ...card, position: i }));
 
       const cards = [...rest, ...temp].sort((a, b) => a.position - b.position);
@@ -59,16 +62,19 @@ export function BoardView() {
     },
   });
 
+  const cardsByColumn = useCallback(
+    ({ columnName }: { columnName: ColumnEnum }) => {
+      return curBoard?.cards.filter(card => card.column === columnName) ?? [];
+    },
+    [curBoard],
+  );
+
   if (curBoardLoading) {
     return (
       <div className="flex min-h-full w-full items-center justify-center">
         <CircularProgress />
       </div>
     );
-  }
-
-  function cardsByColumn({ columnName }: { columnName: ColumnEnum }) {
-    return curBoard?.cards.filter(card => card.column === columnName) ?? [];
   }
 
   return (
@@ -83,8 +89,6 @@ export function BoardView() {
             if (!source || !destination) {
               return;
             }
-
-            console.log({ result });
 
             moveCard.mutate({
               id: result.draggableId,

@@ -11,8 +11,8 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-full flex-row gap-5 bg-gradient-to-b from-[#2e026d] to-[#15162c] p-3 text-white">
-      <div className="flex min-h-[100%] w-[500px] flex-col justify-start gap-4 border-r-[1px] border-r-blue-500 p-3">
+    <main className="flex min-h-full flex-row gap-5 bg-[#FBF7F0] text-[#555555]">
+      <div className="flex min-h-[100%] w-[500px] flex-col justify-start gap-4 border-r-[1px]  p-3">
         {boards.map(b => (
           <Board key={b.id} id={b.id} name={b.name} />
         ))}

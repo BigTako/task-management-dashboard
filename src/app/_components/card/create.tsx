@@ -32,6 +32,25 @@ export function CreateCard({ boardId, column }: { boardId: string; column: Colum
     },
   });
 
+  /*
+      <input
+        type="text"
+        placeholder="Title"
+        value={name}
+        onChange={e => setName(e.target.value)}
+        className="w-full rounded-[10px] bg-[#FBF7F0] text-inherit outline-none px-4 py-2 "
+      />
+      <InputError>{boardErrors.name}</InputError>
+      <button
+        type="submit"
+        className="w-full rounded-[10px] bg-[#555555] px-3 py-2 font-semibold text-white transition"
+        disabled={createBoard.isPending}
+      >
+        {createBoard.isPending ? <CircularProgress size={'20px'} /> : 'Submit'}
+      </button>
+
+*/
+  // w-full rounded-[10px] bg-[#CDC9C3] text-[#555555] placeholder-[#555555] outline-none
   const { title, description } = cardData;
 
   return (
@@ -47,7 +66,7 @@ export function CreateCard({ boardId, column }: { boardId: string; column: Colum
         placeholder="Title"
         value={title}
         onChange={e => setCardData(v => ({ ...v, title: e.target.value }))}
-        className="w-full rounded-[10px] border-[1px] border-black px-4 py-2 text-black"
+        className="w-full rounded-[10px] bg-[#CDC9C3] px-4 py-2 text-[#555555] placeholder-[#555555] outline-none"
       />
       <InputError>{cardErrors.title}</InputError>
       <input
@@ -55,12 +74,12 @@ export function CreateCard({ boardId, column }: { boardId: string; column: Colum
         placeholder="Descripton"
         value={description}
         onChange={e => setCardData(v => ({ ...v, description: e.target.value }))}
-        className="w-full rounded-[10px] border-[1px] border-black px-4 py-2 text-black"
+        className="w-full rounded-[10px] bg-[#CDC9C3] px-4 py-2 text-inherit placeholder-[#555555] outline-none "
       />
       <InputError>{cardErrors.description}</InputError>
       <button
         type="submit"
-        className="w-full rounded-[10px] bg-gray-800 px-3 py-2 font-semibold text-white transition"
+        className="w-full rounded-[10px] bg-[#555555] px-3 py-2 font-semibold text-white transition"
         disabled={createCard.isPending}
       >
         {createCard.isPending ? <CircularProgress size={'20px'} /> : 'Submit'}

@@ -83,8 +83,6 @@ export const cardRouter = createTRPCRouter({
         boardId: z.string(),
         toPosition: z.number(),
         toColumn: z.string(),
-        // source: z.object({ position: z.number(), column: z.string() }),
-        // destination: z.object({ position: z.number(), column: z.string() }),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -178,129 +176,6 @@ export const cardRouter = createTRPCRouter({
           });
         }),
       );
-
-      // reorder new column cards
-      // await ctx.db.$transaction(
-      //   Array.from({ length: newColumnCards.length + 1}).map((_, i) => {
-      //     const card = newColumnCards[i];
-      //     return ctx.db.card.update({
-      //       where: { id: card.id },
-      //       data: { position: i },
-      //     });
-      //   })
-      // newColumnCards.map((card, i) => {
-      // return ctx.db.card.update({
-      //   where: { id: card.id },
-      //   data: { position: i },
-      // });
-      // }),
-      // );
-
-      // const columnCards = await ctx.db.card.findMany({
-      //   where: {
-      //     boardId,
-      //     column: toColumn as Column,
-      //     id: {
-      //       not: {
-      //         equals: id,
-      //       },
-      //     },
-      //   },
-      // });
-
-      // columnCards.splice(toPosition, 0, { ...foundedCard, position: toPosition });
-
-      // const updateOperations = columnCards.map((card, i) => {
-      //   return ctx.db.card.update({
-      //     where: { id: card.id },
-      //     data: { position: i, column: toColumn as Column },
-      //   });
-      // });
-
-      // return await ctx.db.$transaction(updateOperations);
-
-      // const { id, source, destination, boardId } = input;
-      // const isSameColumn = destination.column === source.column;
-      // const { _max } = await ctx.db.card.aggregate({
-      //   where: {
-      //     boardId,
-      //     column: destination.column as Column,
-      //   },
-      //   _max: {
-      //     position: true,
-      //   },
-      // });
-      // const lastPosition = _max.position ?? 0;
-      // if (isSameColumn) {
-      //   if (destination.position === 0) {
-      //     // to the beggining
-      //     await ctx.db.card.updateMany({
-      //       where: {
-      //         boardId,
-      //         column: destination.column as Column,
-      //       },
-      //       data: {
-      //         position: {
-      //           increment: 1,
-      //         },
-      //       },
-      //     });
-      //   } else if (destination.position <= lastPosition) {
-      //     //somewhere to the middle
-      //     await ctx.db.card.updateMany({
-      //       where: {
-      //         boardId,
-      //         column: destination.column as Column,
-      //         position: {
-      //           gte: destination.position,
-      //         },
-      //       },
-      //       data: {
-      //         position: {
-      //           increment: 1,
-      //         },
-      //       },
-      //     });
-      //   }
-      // } else {
-      //   await ctx.db.card.updateMany({
-      //     where: {
-      //       boardId,
-      //       column: source.column as Column,
-      //       position: {
-      //         gt: source.position,
-      //       },
-      //     },
-      //     data: {
-      //       position: {
-      //         decrement: 1,
-      //       },
-      //     },
-      //   });
-      //   await ctx.db.card.updateMany({
-      //     where: {
-      //       boardId,
-      //       column: destination.column as Column,
-      //       position: {
-      //         gte: destination.position,
-      //       },
-      //     },
-      //     data: {
-      //       position: {
-      //         increment: 1,
-      //       },
-      //     },
-      //   });
-      // }
-      // return await ctx.db.card.update({
-      //   where: {
-      //     id,
-      //   },
-      //   data: {
-      //     position: destination.position,
-      //     column: destination.column as Column,
-      //   },
-      // });
     }),
   update: publicProcedure
     .input(
