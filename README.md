@@ -1,29 +1,39 @@
-# Create T3 App
+# Task management dashboard
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+# Getting Started
 
-## What's next? How do I make an app with this?
+### Install all necessary packages
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+```bash
+# run in terminal
+$ npm install
+```
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+### Env setup
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+Copy `.env.example` to `.env` and populate it with the missing/relevant environment variables.
 
-## Learn More
+### Storage launch
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+#### Using Docker
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+If you have `Docker` installed on your machine just run `docker compose up` to launch development and test DBs.
+(use separate terminal since services are running in attached mode)
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+#### Without Docker
 
-## How do I deploy this?
+Since app is using `PostgreSQL`, download latest version of PostgreSQL from [here](http://postgresql.org/download/) to your computer and install it.
+Next, launch 2 databases (using `psql` or similar tool) with credentials identical to those you can find in the `docker-compose.yml` file.
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+### Run migrations
+
+1. When db launched run migrations on db(this will clear db and run all existing migrations), using:
+
+```bash
+$ npm run db:reset
+```
+
+## Testing
+
+Unfortunately didn't have enough time to implement:( Could be done using `playwright`, `jest` , etc...).
+Read more: https://nextjs.org/docs/app/building-your-application/testing/playwright
