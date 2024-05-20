@@ -8,6 +8,7 @@ import { CreateCard } from './create';
 import type { Column } from '@prisma/client';
 import { EditCard } from './edit';
 import type { CardType } from './types';
+import { CircularProgress } from '@mui/material';
 
 function CardLayout({ children, className }: { children: ReactNode; className?: string }) {
   return (
@@ -45,7 +46,7 @@ export function Card({ card }: { card: CardType }) {
             {editFormOpened ? <BsXCircleFill /> : <BsPencilSquare />}
           </button>
           <button className="text-[20px]" onClick={() => deleteCard.mutate({ id })}>
-            <BsTrashFill />
+            {deleteCard.isPending ? <CircularProgress size={'20px'} /> : <BsTrashFill />}
           </button>
         </div>
       </div>
